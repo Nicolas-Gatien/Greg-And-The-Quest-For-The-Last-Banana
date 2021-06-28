@@ -34,7 +34,7 @@ public abstract class EnemyBase : MonoBehaviour
     // Constructor
     public EnemyBase()
     {
-        Init();
+
     }
 
     // Set Behavior Functions
@@ -58,7 +58,7 @@ public abstract class EnemyBase : MonoBehaviour
     // Call Functions
     public void PerformAttack()
     {
-        attackBehavior.Attack();
+        attackBehavior.Attack(gameObject);
     }
     public void PerformUpdate()
     {
@@ -70,6 +70,10 @@ public abstract class EnemyBase : MonoBehaviour
     }
 
     // Universal Functions
+    public void Start()
+    {
+        health = maxHealth;
+    }
     public void Update()
     {
         CheckHealth();
@@ -87,9 +91,5 @@ public abstract class EnemyBase : MonoBehaviour
         {
             PerformDeath();
         }
-    }
-    public void Init()
-    {
-        health = maxHealth;
     }
 }

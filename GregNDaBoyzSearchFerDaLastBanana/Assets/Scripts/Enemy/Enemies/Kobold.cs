@@ -5,15 +5,13 @@ using UnityEngine;
 [System.Serializable]
 public class Kobold : EnemyBase
 {
-
     // Constructor
     public Kobold()
     {
-        updateBehavior = new Patrol(this);
-        attackBehavior = new KoboldAttack();
+        updateBehavior = new Patrol(this, 0.3f, 1f);
+        attackBehavior = new Leap(this);
         deathBehavior = new KoboldDeath();
         takeDamageBehavior = new KoboldDamage();
-        Init();
     }
     public Kobold(IUpdateBehavior ub, IAttackBehavior ab, IDeathBehavior db, ITakeDamageBehavior tdb)
     {
@@ -21,6 +19,5 @@ public class Kobold : EnemyBase
         attackBehavior = ab;
         deathBehavior = db;
         takeDamageBehavior = tdb;
-        Init();
     }
 }

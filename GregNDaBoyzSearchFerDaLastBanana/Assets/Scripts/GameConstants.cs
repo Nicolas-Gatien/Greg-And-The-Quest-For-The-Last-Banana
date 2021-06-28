@@ -13,4 +13,5 @@ public static class GameConstants
     public const int LAYER_LADDER = 9;
     public const int LAYER_CHAIN = 10;
     public const int LAYER_ENEMY = 11;
+    public const int LAYER_PLAYER = 12;
 }

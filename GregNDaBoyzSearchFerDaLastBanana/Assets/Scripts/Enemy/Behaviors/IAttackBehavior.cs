@@ -1,4 +1,6 @@
-﻿public interface IAttackBehavior
+﻿using UnityEngine;
+
+public interface IAttackBehavior
 {
-    void Attack();
+    void Attack(GameObject gameObject);
 }
