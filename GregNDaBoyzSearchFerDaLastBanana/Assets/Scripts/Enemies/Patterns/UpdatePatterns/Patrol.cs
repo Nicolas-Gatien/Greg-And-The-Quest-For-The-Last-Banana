@@ -30,10 +30,10 @@ public class Patrol : IUpdateBehavior
         Vector3 forwardPos = new Vector3(transform.position.x + (1 * transform.right.x), transform.position.y, transform.position.z);
 
         // Raycasts
-        RaycastHit2D frontRay = Physics2D.Raycast(transform.position, transform.right, enemy.viewRange, SetLayerMask(GameConstants.LAYER_GROUND));
-        RaycastHit2D topRay = Physics2D.Raycast(topPos, transform.right, enemy.viewRange, SetLayerMask(GameConstants.LAYER_GROUND));
-        RaycastHit2D groundRay = Physics2D.Raycast(forwardPos, transform.up * -1, enemy.viewRange * 2, SetLayerMask(GameConstants.LAYER_GROUND));
-        RaycastHit2D playerRay = Physics2D.Raycast(transform.position, transform.right, enemy.playerViewRange, SetLayerMask(GameConstants.LAYER_PLAYER));
+        RaycastHit2D frontRay = Physics2D.Raycast(transform.position, transform.right, enemy.viewRange, GameConstants.SetLayerMask(GameConstants.LAYER_GROUND));
+        RaycastHit2D topRay = Physics2D.Raycast(topPos, transform.right, enemy.viewRange, GameConstants.SetLayerMask(GameConstants.LAYER_GROUND));
+        RaycastHit2D groundRay = Physics2D.Raycast(forwardPos, transform.up * -1, enemy.viewRange * 2, GameConstants.SetLayerMask(GameConstants.LAYER_GROUND));
+        RaycastHit2D playerRay = Physics2D.Raycast(transform.position, transform.right, enemy.playerViewRange, GameConstants.SetLayerMask(GameConstants.LAYER_PLAYER));
         // Functionality
 
         if (playerRay.collider != null)
@@ -42,7 +42,7 @@ public class Patrol : IUpdateBehavior
             {
                 canMove = false;
                 rb.velocity = Vector2.zero;
-                enemy.StartCoroutine(PlayerSpotted());
+                enemy.StartCoroutine(PlayerSpotted(gameObject));
             }
         }
 
@@ -72,9 +72,10 @@ public class Patrol : IUpdateBehavior
     }
 
     
-    IEnumerator PlayerSpotted()
+    IEnumerator PlayerSpotted(GameObject gameObject)
     {
         hasAttacked = true;
+        gameObject.GetComponent<Animator>().SetTrigger("Attack");
         yield return new WaitForSeconds(waitTimeForAttack);
         enemy.PerformAttack();
         yield return new WaitForSeconds(waitTimeAfterAttack);
@@ -84,9 +85,5 @@ public class Patrol : IUpdateBehavior
     void Flip(Transform transform)
     {
         transform.Rotate(0, 180, 0);
-    }
-    public LayerMask SetLayerMask(int layer)
-    {
-        return LayerMask.GetMask(LayerMask.LayerToName(layer));
     }
 }

@@ -8,10 +8,11 @@ public class Kobold : EnemyBase
     // Constructor
     public Kobold()
     {
-        updateBehavior = new Patrol(this, 0.3f, 1f);
+        updateBehavior = new Patrol(this, 0.5f, 0.75f);
         attackBehavior = new Leap(this);
         deathBehavior = new KoboldDeath();
         takeDamageBehavior = new KoboldDamage();
+        animatorBehavior = new GroundedEnemy();
     }
     public Kobold(IUpdateBehavior ub, IAttackBehavior ab, IDeathBehavior db, ITakeDamageBehavior tdb)
     {

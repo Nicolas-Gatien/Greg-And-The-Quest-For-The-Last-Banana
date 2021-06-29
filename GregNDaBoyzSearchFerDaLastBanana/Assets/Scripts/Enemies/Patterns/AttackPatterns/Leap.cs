@@ -15,6 +15,7 @@ public class Leap : IAttackBehavior
     {
         Transform transform = gameObject.transform;
         Rigidbody2D rb = gameObject.GetComponent<Rigidbody2D>();
+        Debug.Log("Jumping");
         rb.velocity += new Vector2(((Vector2.Distance(transform.position, GameObject.FindGameObjectWithTag("Player").transform.position)) * transform.right.x) * 2f, 15);
     }
 }

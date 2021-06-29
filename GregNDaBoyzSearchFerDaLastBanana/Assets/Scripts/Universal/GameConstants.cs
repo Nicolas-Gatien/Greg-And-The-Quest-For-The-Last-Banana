@@ -14,4 +14,10 @@ public static class GameConstants
     public const int LAYER_CHAIN = 10;
     public const int LAYER_ENEMY = 11;
     public const int LAYER_PLAYER = 12;
+
+    // Functions
+    public static LayerMask SetLayerMask(int layer)
+    {
+        return LayerMask.GetMask(LayerMask.LayerToName(layer));
+    }
 }

@@ -6,13 +6,13 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public abstract class EnemyBase : MonoBehaviour
 {
-
     // Variables
     [Header("Behaviors")]
     public IAttackBehavior attackBehavior;
     public IUpdateBehavior updateBehavior;
     public IDeathBehavior deathBehavior;
     public ITakeDamageBehavior takeDamageBehavior;
+    public IAnimatorBehavior animatorBehavior;
 
     [Header("VFX")]
     public Animator animator;
@@ -54,6 +54,10 @@ public abstract class EnemyBase : MonoBehaviour
     {
         takeDamageBehavior = tdmgBehavior;
     }
+    public void SetAnimatorBehavior(IAnimatorBehavior animBehavior)
+    {
+        animatorBehavior = animBehavior;
+    }
 
     // Call Functions
     public void PerformAttack()
@@ -68,6 +72,10 @@ public abstract class EnemyBase : MonoBehaviour
     {
         deathBehavior.Die();
     }
+    public void SetAnimations()
+    {
+        animatorBehavior.Animate(animator, gameObject);
+    }
 
     // Universal Functions
     public void Start()
@@ -78,6 +86,7 @@ public abstract class EnemyBase : MonoBehaviour
     {
         CheckHealth();
         PerformUpdate();
+        SetAnimations();
     }
     public void TakeDamage(int damage)
     {
@@ -86,7 +95,6 @@ public abstract class EnemyBase : MonoBehaviour
     }
     public void CheckHealth()
     {
-        Debug.Log("CheckingHealth");
         if(health <= 0)
         {
             PerformDeath();
