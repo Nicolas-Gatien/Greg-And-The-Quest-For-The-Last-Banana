@@ -17,8 +17,6 @@ public class PlayerMovement : MonoBehaviour
 
     public Animator anim;
 
-    public Vector3 lastGroundedPos;
-
     [Space]
     public float climbSpeed;
     public LayerMask whatIsLadder;
@@ -33,7 +31,10 @@ public class PlayerMovement : MonoBehaviour
     float curJumpTime;
 
     public GameObject deathAnimation;
+    public Vector2 currentCheckpoint;
 
+    public bool canMove;
+    public float respawnTime = 1;
     // Start is called before the first frame update
     void Start()
     {
@@ -81,7 +82,6 @@ public class PlayerMovement : MonoBehaviour
         {
             curCoyoteTime = coyoteTime;
             anim.SetBool("IsGrounded", true);
-            StartCoroutine(SetGroundPos());
         }else
         {
             anim.SetBool("IsGrounded", false);
@@ -91,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, climbSpeed * ladderMove.y);
         }
 
-        if (curJumpTime >= 0 && curCoyoteTime >= 0)
+        if (curJumpTime >= 0 && curCoyoteTime >= 0 && canMove)
         {
             anim.SetTrigger("Jump");
 
@@ -100,7 +100,10 @@ public class PlayerMovement : MonoBehaviour
             curJumpTime = -1;
 
         }
-        rb.velocity = new Vector2(movement.x * speed, rb.velocity.y);
+        if(canMove)
+        {
+            rb.velocity = new Vector2(movement.x * speed, rb.velocity.y);
+        }
 
         if (Input.GetKey(KeyCode.A))
         {
@@ -124,14 +127,17 @@ public class PlayerMovement : MonoBehaviour
         if (collision.CompareTag("Death"))
         {
             Instantiate(deathAnimation, transform.position, Quaternion.identity);
-            transform.position = new Vector3(lastGroundedPos.x, lastGroundedPos.y + 0.5f, lastGroundedPos.z);
+            StartCoroutine(Respawn());
         }
     }
 
-    IEnumerator SetGroundPos()
+    IEnumerator Respawn()
     {
-        Vector3 curPos = transform.position;
-        yield return new WaitForSeconds(1f);
-        lastGroundedPos = curPos;
+        rb.velocity = Vector2.zero;
+        canMove = false;
+        transform.position = currentCheckpoint;
+        anim.SetTrigger("respawn");
+        yield return new WaitForSeconds(respawnTime);
+        canMove = true;
     }
 }
