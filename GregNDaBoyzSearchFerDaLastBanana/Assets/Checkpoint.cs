@@ -14,11 +14,11 @@ public class Checkpoint : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && !isActivated)
+        if (other.CompareTag("Player"))
         {
             other.GetComponent<PlayerMovement>().currentCheckpoint = this.transform.position;
-            anim.SetTrigger("activate");
             isActivated = true;
+            anim.SetTrigger("activate");
         }
     }
 }
