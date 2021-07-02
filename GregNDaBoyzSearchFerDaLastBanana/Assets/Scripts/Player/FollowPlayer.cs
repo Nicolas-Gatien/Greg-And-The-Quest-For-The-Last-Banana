@@ -10,6 +10,8 @@ public class FollowPlayer : MonoBehaviour
     public float followDistance;
     private List<Vector3> storedPositions;
 
+    public Vector3 offset;
+
 
     void Awake()
     {
@@ -37,7 +39,7 @@ public class FollowPlayer : MonoBehaviour
 
         if (storedPositions.Count > followDistance)
         {
-            followingMe.transform.position = storedPositions[0]; //move the player
+            followingMe.transform.position = storedPositions[0] + offset; //move the player
             storedPositions.RemoveAt(0); //delete the position that player just move to
         }
     }
