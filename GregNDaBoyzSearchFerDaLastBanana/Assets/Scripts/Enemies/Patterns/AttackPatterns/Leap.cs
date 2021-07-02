@@ -19,14 +19,6 @@ public class Leap : IAttackBehavior
     }
 }
 
-public class KoboldDeath : IDeathBehavior
-{
-    public void Die()
-    {
-        Debug.Log("REEEEEEEEEEEEEEEE, I've died");
-    }
-}
-
 public class KoboldDamage : ITakeDamageBehavior
 {
     public void TakeDamage()

@@ -10,7 +10,7 @@ public class Kobold : EnemyBase
     {
         updateBehavior = new Patrol(this, 0.5f, 0.75f);
         attackBehavior = new Leap(this);
-        deathBehavior = new KoboldDeath();
+        deathBehavior = new BasicDeath(this);
         takeDamageBehavior = new KoboldDamage();
         animatorBehavior = new GroundedEnemy();
     }

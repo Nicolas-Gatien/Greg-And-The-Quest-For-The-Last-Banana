@@ -32,9 +32,5 @@ public class GroundedEnemy : MonoBehaviour, IAnimatorBehavior
         {
             anim.SetBool("isGrounded", false);
         }
-        Debug.Log(gameObject + " " + isGrounded);
-
-     //   GameObject groundcheck = Instantiate(new GameObject("Groundcheck"), bottom, Quaternion.identity);
-     //   groundcheck.transform.parent = transform;
     }
 }

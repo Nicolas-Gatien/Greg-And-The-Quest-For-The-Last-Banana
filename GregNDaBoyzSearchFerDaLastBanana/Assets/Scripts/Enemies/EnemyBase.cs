@@ -16,6 +16,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     [Header("VFX")]
     public Animator animator;
+    public GameObject[] deathEffects;
 
     [Header("Components")]
     [HideInInspector]
@@ -27,9 +28,11 @@ public abstract class EnemyBase : MonoBehaviour
     public float playerViewRange;
 
     [Header("Other")]
-    [HideInInspector]
     public int health;
     public float viewRange;
+
+    // Functionality Variables
+    bool hasDied;
 
     // Constructor
     public EnemyBase()
@@ -80,6 +83,7 @@ public abstract class EnemyBase : MonoBehaviour
     // Universal Functions
     public void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
         health = maxHealth;
     }
     public void Update()
@@ -95,9 +99,20 @@ public abstract class EnemyBase : MonoBehaviour
     }
     public void CheckHealth()
     {
-        if(health <= 0)
+        if(health <= 0 && !hasDied)
         {
+            hasDied = true;
             PerformDeath();
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Death"))
+        {
+            TakeDamage(1);
+        }
+    }
+    
 }
+

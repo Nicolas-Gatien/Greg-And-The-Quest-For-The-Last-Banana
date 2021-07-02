@@ -168,13 +168,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 8127704916999184303}
+  deathEffects: []
   rb: {fileID: 0}
   speed: 5
-  maxHealth: 5
+  maxHealth: 1
   playerViewRange: 5
   health: 0
   viewRange: 1.2
-  leapForce: {x: 7, y: 3}
 --- !u!70 &863575892140061701
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
