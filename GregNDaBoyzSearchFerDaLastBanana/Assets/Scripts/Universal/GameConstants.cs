@@ -21,3 +21,11 @@ public static class GameConstants
         return LayerMask.GetMask(LayerMask.LayerToName(layer));
     }
 }
+
+// Enums
+public enum GregStates
+{
+    Grounded,
+    Falling,
+    Climbing
+}
