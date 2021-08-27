@@ -6,7 +6,8 @@ public class PlayerMovement : MonoBehaviour
 {
     // Variables
     [Header("Stats")]
-    public float baseMoveSpeed;
+    public float groundedMoveSpeed;
+    public float airbornMoveSpeed;
     public float baseLadderClimbSpeed;
     public int numOfJumps;
     public float jumpHeight;
@@ -47,6 +48,7 @@ public class PlayerMovement : MonoBehaviour
 
     // Stored Variables
     rbComponent storedRigidbody;
+    MovementStates States;
 
     void Start()
     {
@@ -54,6 +56,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         whatIsGround = GameConstants.SetLayerMask(GameConstants.LAYER_GROUND);
         whatIsLadder = GameConstants.SetLayerMask(GameConstants.LAYER_LADDER);
+        States = GetComponent<MovementStates>();
         #region Stored Rigidbody
         storedRigidbody.angularDrag = rb.angularDrag;
         storedRigidbody.angularVelocity = rb.angularVelocity;
@@ -95,22 +98,11 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        onLadder = Physics2D.OverlapCircle(transform.position, checkRadius, whatIsLadder);
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
-        movement.x = Input.GetAxis("Horizontal");
-        ladderMove.y = Input.GetAxis("Vertical");
+        CheckSurroundings();
+        GetInput();
+        UpdateTimers();
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            curJumpTime = jumpTime;
-        }
-
-        curCoyoteTime -= Time.deltaTime;
-        curJumpTime -= Time.deltaTime;
-
-        if (onLadder) { states = GregStates.Climbing; } // if on ladder
-        if (isGrounded && !onLadder) { states = GregStates.Grounded; } // is Grounded
-        if (!isGrounded && !onLadder) { states = GregStates.Falling; } // if falling
+        SetStates();
 
         if (states == GregStates.Climbing)
         {
@@ -195,13 +187,15 @@ public class PlayerMovement : MonoBehaviour
         #endregion
     }
 
+    // States
+
     void ClimbingBehavior()
     {
-
+        rb.gravityScale = 0;
     }
     void GroundedBehavior()
     {
-        rb.velocity = new Vector2(movement.x * baseMoveSpeed, rb.velocity.y);
+        rb.velocity = new Vector2(movement.x * groundedMoveSpeed, rb.velocity.y);
         if(movement.x > 0)
         {
             transform.rotation = Quaternion.Euler(0f, 0f, 0f);
@@ -209,10 +203,14 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.rotation = Quaternion.Euler(0f, 180f, 0f);
         }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+        }
     }
     void FallingBehavior()
     {
-
+        rb.velocity = new Vector2(movement.x * airbornMoveSpeed, rb.velocity.y);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -239,6 +237,33 @@ public class PlayerMovement : MonoBehaviour
     void Flip()
     {
         transform.Rotate(0f, 180f, 0f);
+    }
+
+    void UpdateTimers()
+    {
+        curCoyoteTime -= Time.deltaTime;
+        curJumpTime -= Time.deltaTime;
+    }
+    void CheckSurroundings()
+    {
+        onLadder = Physics2D.OverlapCircle(transform.position, checkRadius, whatIsLadder);
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+    }
+    void GetInput()
+    {
+        movement.x = Input.GetAxis("Horizontal");
+        ladderMove.y = Input.GetAxis("Vertical");
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            curJumpTime = jumpTime;
+        }
+    }
+    void SetStates()
+    {
+        if (onLadder) { states = GregStates.Climbing; } // if on ladder
+        if (isGrounded && !onLadder) { states = GregStates.Grounded; } // is Grounded
+        if (!isGrounded && !onLadder) { states = GregStates.Falling; } // if falling
     }
 }
 
