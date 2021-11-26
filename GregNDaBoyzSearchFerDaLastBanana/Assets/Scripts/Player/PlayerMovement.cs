@@ -26,15 +26,15 @@ public class PlayerMovement : MonoBehaviour
     float curJumpTime;
 
     [Header("Hidden Variables")]
-    Vector2 movement;
+    public Vector2 movement;
     Vector2 ladderMove;
-    bool isGrounded;
+    public bool isGrounded;
     bool onLadder;
     float gScale;
 
     [Header("Components")]
-    Rigidbody2D rb;
-    Animator anim;
+    public Rigidbody2D rb;
+    public Animator animation;
 
     [Header("States")]
     public bool canMove;
@@ -50,10 +50,14 @@ public class PlayerMovement : MonoBehaviour
     rbComponent storedRigidbody;
     MovementStates States;
 
+    private void Awake()
+    {
+        animation = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
+    }
+
     void Start()
     {
-        anim = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
         whatIsGround = GameConstants.SetLayerMask(GameConstants.LAYER_GROUND);
         whatIsLadder = GameConstants.SetLayerMask(GameConstants.LAYER_LADDER);
         States = GetComponent<MovementStates>();
@@ -117,7 +121,7 @@ public class PlayerMovement : MonoBehaviour
             FallingBehavior();
         }
 
-        anim.SetFloat("velocity", rb.velocity.sqrMagnitude);
+        animation.SetFloat("velocity", rb.velocity.sqrMagnitude);
         #region Old Code
         /*if (onLadder)
         {
@@ -195,7 +199,6 @@ public class PlayerMovement : MonoBehaviour
     }
     void GroundedBehavior()
     {
-        rb.velocity = new Vector2(movement.x * groundedMoveSpeed, rb.velocity.y);
         if(movement.x > 0)
         {
             transform.rotation = Quaternion.Euler(0f, 0f, 0f);
@@ -228,7 +231,7 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = Vector2.zero;
         canMove = false;
         transform.position = currentCheckpoint;
-        anim.SetTrigger("respawn");
+        animation.SetTrigger("respawn");
         yield return new WaitForSeconds(respawnTime);
         canMove = true;
     }
